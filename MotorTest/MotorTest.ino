@@ -1,10 +1,10 @@
 #define SPEED 255
-int TR = 2;
+//int TR = 2;
 
 int pos;
 
 void setup() {
-  pinMode(TR,OUTPUT);
+  //pinMode(TR,OUTPUT);
   
   Serial.begin(9600);
   // モーターAの制御用ピン設定

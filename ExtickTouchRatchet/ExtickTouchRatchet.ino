@@ -1,6 +1,11 @@
-#define SPEED 255
+#define SPEED 240
+//int TR = 2;
 
 int pos;
+
+bool flag=false;
+bool flag_sol=false;
+long timer=0;
 
 void setup() {
   
@@ -10,9 +15,12 @@ void setup() {
   pinMode(9, OUTPUT); // ブレーキ (HIGH/LOW)
   pinMode(3, OUTPUT); // A PWMによるスピード制御 (0-255)
   pos=1023;
+
+  //pinMode(TR,OUTPUT);
 }
 
 void loop() {
+  
   
   int vr = analogRead(A2); //A2にボリューム部の2ピンを接続。1=5V,0=GND
   
@@ -30,19 +38,53 @@ void loop() {
   
  
   int diff = pos-vr;
- 
+
+  
   if(diff>=10){
     // モーターA: 正転
     digitalWrite(12, HIGH);
     digitalWrite(9, LOW);
+    if(flag){
+      //digitalWrite(TR,LOW);
+     // Serial.println("move");
+      flag=false;
+    }
+    if(flag_sol){
+      //digitalWrite(TR,LOW);
+      //Serial.println("0");
+      flag_sol=false;
+    }
+    
     analogWrite(3, SPEED);
   }else if(diff<=-10){
      // モーターA: 逆転
     digitalWrite(12, LOW);
     digitalWrite(9, LOW);
+    if(flag){
+      //digitalWrite(TR,LOW);
+      //Serial.println("move");
+      flag=false;
+    }
+    if(flag_sol){
+      //digitalWrite(TR,LOW);
+      //Serial.println("0");
+      flag_sol=false;
+    }
     analogWrite(3, SPEED);
   }else{
     digitalWrite(9, HIGH);
+    if(!flag){
+      //digitalWrite(TR,HIGH);
+      //Serial.println("stop");
+      flag=true;
+      timer=millis();
+    }
+    if(!flag_sol && millis()-timer>100){
+      Serial.println("1");
+      //digitalWrite(TR,HIGH);
+      timer=millis();
+      flag_sol=true;
+    }
   }
 }
 
