@@ -25,7 +25,7 @@ void loop() {
   int vr = analogRead(A2); //A2にボリューム部の2ピンを接続。1=5V,0=GND
   
   int num = serialread();
-  if(num!=-1) {
+  if(num!=-1 && num!=1) {
     if(num<0){
       pos = 0;
     }else if(num>1023){
