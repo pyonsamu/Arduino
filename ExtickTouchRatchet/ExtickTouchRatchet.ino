@@ -1,4 +1,4 @@
-#define SPEED 240
+#define SPEED 255
 //int TR = 2;
 
 int pos;
@@ -6,6 +6,7 @@ int pos;
 bool flag=false;
 bool flag_sol=false;
 long timer=0;
+bool ismoving=false;
 
 void setup() {
   
@@ -26,6 +27,7 @@ void loop() {
   
   int num = serialread();
   if(num!=-1 && num!=1) {
+    ismoving=true;
     if(num<0){
       pos = 0;
     }else if(num>1023){
@@ -35,7 +37,9 @@ void loop() {
     }
   }
 
-  
+  if(!ismoving){
+    return;
+  }
  
   int diff = pos-vr;
 
@@ -79,11 +83,12 @@ void loop() {
       flag=true;
       timer=millis();
     }
-    if(!flag_sol && millis()-timer>100){
+    if(!flag_sol && millis()-timer>20){
       Serial.println("1");
       //digitalWrite(TR,HIGH);
       timer=millis();
       flag_sol=true;
+      ismoving=false;
     }
   }
 }
